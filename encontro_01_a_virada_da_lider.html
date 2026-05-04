@@ -1,0 +1,3201 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Primeiro Encontro · A Virada da Líder</title>
+<meta name="description" content="A Jornada ELO começa aqui. Ferramenta-mãe do primeiro encontro: cada porta abre quando a Mel libera." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14110f;
+  --coffee:#231815;
+  --cacao:#3a2520;
+  --bronze:#a6673e;
+  --bronze-deep:#6e3b2e;
+  --gold:#d6a75f;
+  --cream:#f8f1e8;
+  --paper:#fbf7ef;
+  --paper-warm:#f4ebde;
+  --sand:#e9ddd1;
+  --taupe:#7c7068;
+  --line:rgba(20,17,15,.10);
+  --line-strong:rgba(20,17,15,.18);
+  --soft:0 18px 48px rgba(20,17,15,.08);
+  --shadow:0 28px 70px rgba(20,17,15,.14);
+  --radius:24px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Manrope",ui-sans-serif,system-ui,-apple-system,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 12% 6%, rgba(214,167,95,.16), transparent 32%),
+    radial-gradient(circle at 92% 92%, rgba(166,103,62,.10), transparent 30%),
+    linear-gradient(180deg,#fbf5ec 0%, #f1e6d6 100%);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(20,17,15,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20,17,15,.022) 1px, transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom, #000, transparent 92%);
+  z-index:-1;
+}
+
+/* ======================== LAYOUT ======================== */
+.app{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  min-height:100vh;
+  position:relative;
+}
+@media (max-width:880px){
+  .app{ grid-template-columns:1fr }
+  .rail{ display:none }
+}
+
+/* ======================== RAIL (left navigation - 10 portas) ======================== */
+.rail{
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:34px 24px;
+  border-right:1px solid var(--line);
+  background:rgba(255,250,242,.55);
+  backdrop-filter:blur(14px);
+  overflow-y:auto;
+}
+.rail-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:30px;
+}
+.rail-logo{
+  width:42px;height:42px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, #fff, var(--paper-warm) 78%);
+  border:1px solid rgba(166,103,62,.18);
+  display:grid;place-items:center;
+  flex:0 0 auto;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+}
+.rail-logo svg{width:26px;height:26px}
+.rail-brand-text{
+  font-family:"Cormorant Garamond", serif;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.1;
+  color:var(--ink);
+}
+.rail-brand-text small{
+  display:block;
+  font-family:"Manrope", sans-serif;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.18em;
+  color:var(--bronze-deep);
+  text-transform:uppercase;
+  margin-top:3px;
+}
+
+.rail-progress{
+  height:4px;
+  background:rgba(20,17,15,.06);
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:24px;
+}
+.rail-progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, var(--bronze), var(--gold));
+  transition:width .5s ease;
+  border-radius:999px;
+}
+
+.rail-portas{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.rail-porta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 10px;
+  border-radius:10px;
+  font-size:12.5px;
+  color:rgba(20,17,15,.55);
+  cursor:default;
+  transition:all .25s ease;
+  position:relative;
+}
+.rail-porta-num{
+  flex:0 0 auto;
+  width:22px;height:22px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(20,17,15,.06);
+  font-family:"Cormorant Garamond", serif;
+  font-size:11px;
+  font-weight:600;
+  color:rgba(20,17,15,.5);
+  font-style:italic;
+}
+.rail-porta-name{
+  flex:1;
+  font-weight:500;
+}
+.rail-porta-icon{
+  flex:0 0 auto;
+  width:14px;height:14px;
+  opacity:.5;
+}
+.rail-porta-icon svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2}
+
+.rail-porta.active{
+  background:var(--ink);
+  color:var(--cream);
+  cursor:pointer;
+}
+.rail-porta.active .rail-porta-num{
+  background:var(--gold);
+  color:var(--ink);
+}
+.rail-porta.active .rail-porta-icon{ opacity:0 }
+
+.rail-porta.done{
+  color:var(--bronze-deep);
+  cursor:pointer;
+}
+.rail-porta.done:hover{
+  background:rgba(166,103,62,.08);
+}
+.rail-porta.done .rail-porta-num{
+  background:var(--bronze);
+  color:var(--cream);
+}
+.rail-porta.done .rail-porta-icon{ opacity:0 }
+
+.rail-porta.locked .rail-porta-icon{ opacity:.6 }
+
+.rail-foot{
+  margin-top:30px;
+  padding-top:22px;
+  border-top:1px dashed rgba(166,103,62,.22);
+  font-size:11px;
+  line-height:1.55;
+  color:var(--taupe);
+  font-style:italic;
+}
+.rail-foot strong{
+  font-style:normal;
+  color:var(--ink);
+  font-weight:600;
+}
+
+/* Mel mode indicator */
+.mel-badge{
+  display:none;
+  margin-top:14px;
+  padding:8px 12px;
+  background:linear-gradient(135deg, var(--ink), var(--cacao));
+  color:var(--gold);
+  border-radius:10px;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  text-align:center;
+}
+body.mel-mode .mel-badge{ display:block }
+
+/* ======================== MAIN ======================== */
+.main{
+  padding:48px clamp(20px, 5vw, 72px) 96px;
+  max-width:1100px;
+  margin:0 auto;
+  width:100%;
+}
+
+.porta{
+  display:none;
+  animation:portaIn .6s cubic-bezier(.2,.8,.2,1);
+}
+.porta.show{ display:block }
+@keyframes portaIn{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+.porta-header{
+  margin-bottom:36px;
+}
+.porta-eyebrow{
+  display:inline-block;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--bronze);
+  padding:7px 14px;
+  border:1px solid rgba(166,103,62,.22);
+  border-radius:999px;
+  background:rgba(255,250,242,.55);
+  margin-bottom:18px;
+}
+
+.porta-title{
+  font-family:"Cormorant Garamond", Georgia, serif;
+  font-weight:600;
+  font-size:clamp(38px, 5.6vw, 60px);
+  line-height:.98;
+  letter-spacing:-.035em;
+  margin:0 0 16px;
+  color:var(--ink);
+}
+.porta-title em{
+  font-style:italic;
+  color:var(--bronze-deep);
+}
+
+.porta-lead{
+  font-size:clamp(15px, 1.6vw, 17px);
+  line-height:1.55;
+  color:rgba(20,17,15,.66);
+  max-width:640px;
+  margin:0;
+}
+
+/* ======================== MEL PAUSE - the obligatory pause ======================== */
+.mel-pause{
+  margin:24px 0;
+  padding:18px 22px;
+  background:linear-gradient(135deg, rgba(20,17,15,.04) 0%, rgba(166,103,62,.06) 100%);
+  border-left:3px solid var(--bronze);
+  border-radius:10px;
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(20,17,15,.7);
+  font-style:italic;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+.mel-pause svg{
+  flex:0 0 auto;
+  width:16px;height:16px;
+  stroke:var(--bronze);
+  fill:none;
+  stroke-width:1.8;
+  margin-top:3px;
+}
+.mel-pause strong{
+  font-style:normal;
+  font-weight:700;
+  color:var(--ink);
+}
+
+/* ======================== CARD GENERIC ======================== */
+.card{
+  background:rgba(255,250,242,.68);
+  backdrop-filter:blur(14px);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:32px;
+  box-shadow:var(--soft);
+  margin-bottom:18px;
+}
+.card.dark{
+  background:linear-gradient(135deg, var(--ink) 0%, var(--cacao) 100%);
+  color:var(--cream);
+  border:none;
+  position:relative;
+  overflow:hidden;
+}
+.card.dark:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 80% 20%, rgba(214,167,95,.16), transparent 50%);
+  pointer-events:none;
+}
+.card.dark > *{ position:relative; z-index:1 }
+.card.gold{
+  background:linear-gradient(135deg, #fbf5ea 0%, var(--sand) 100%);
+  border:1px solid rgba(166,103,62,.22);
+  position:relative;
+}
+.card.gold:before{
+  content:"";
+  position:absolute;
+  top:-1px; left:-1px; right:-1px;
+  height:4px;
+  background:linear-gradient(90deg, var(--bronze) 0%, var(--gold) 50%, var(--bronze-deep) 100%);
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+
+/* ======================== NAV CONTROLS (next/back) ======================== */
+.nav-controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:36px;
+  padding-top:24px;
+  border-top:1px dashed rgba(166,103,62,.22);
+  gap:14px;
+  flex-wrap:wrap;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 24px;
+  border-radius:999px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.02em;
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:transform .25s ease, box-shadow .25s ease, opacity .25s ease;
+  background:none;
+}
+.btn:hover{ transform:translateY(-1px) }
+.btn-primary{
+  background:var(--ink);
+  color:var(--cream);
+  box-shadow:0 12px 28px rgba(20,17,15,.20);
+}
+.btn-primary:hover{ box-shadow:0 16px 36px rgba(20,17,15,.28) }
+.btn-primary[disabled]{
+  opacity:.35;
+  cursor:not-allowed;
+  transform:none;
+}
+.btn-ghost{
+  background:rgba(255,255,255,.55);
+  color:var(--ink);
+  border-color:var(--line-strong);
+}
+.btn svg{ width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2 }
+
+.lock-message{
+  display:none;
+  font-size:11px;
+  color:var(--taupe);
+  font-style:italic;
+  align-items:center;
+  gap:6px;
+}
+.lock-message svg{ width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2 }
+.btn-primary[disabled] + .lock-message{ display:inline-flex }
+
+/* Mel-only unlock button */
+.mel-unlock{
+  display:none;
+  background:linear-gradient(135deg, var(--gold), var(--bronze));
+  color:var(--ink);
+  border:none;
+  padding:11px 20px;
+  border-radius:999px;
+  font-family:inherit;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  cursor:pointer;
+  text-transform:uppercase;
+  box-shadow:0 8px 22px rgba(214,167,95,.30);
+}
+body.mel-mode .mel-unlock{ display:inline-flex; align-items:center; gap:8px }
+.mel-unlock svg{width:13px;height:13px;stroke:var(--ink);fill:none;stroke-width:2.2}
+
+/* ======================== PORTA 1 - ARRIVAL ======================== */
+.arrival{
+  text-align:center;
+  padding:56px 24px;
+  min-height:60vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+.arrival-logo{
+  width:96px;height:96px;
+  margin:0 auto 30px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 30% 30%, #fff, var(--paper-warm) 78%);
+  border:1px solid rgba(166,103,62,.18);
+  box-shadow:0 14px 38px rgba(20,17,15,.10), 0 0 0 8px rgba(214,167,95,.06);
+  position:relative;
+}
+.arrival-logo:after{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:50%;
+  border:1px dashed rgba(166,103,62,.28);
+  animation:orbit 22s linear infinite;
+}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.arrival-logo svg{width:60px;height:60px}
+
+.arrival-statement{
+  font-family:"Cormorant Garamond", serif;
+  font-size:clamp(28px, 4.4vw, 48px);
+  line-height:1.12;
+  letter-spacing:-.025em;
+  color:var(--ink);
+  max-width:740px;
+  margin:0 auto 14px;
+  font-weight:500;
+}
+.arrival-statement em{
+  font-style:italic;
+  color:var(--bronze-deep);
+}
+.arrival-statement strong{
+  font-weight:600;
+  font-style:normal;
+}
+.arrival-sub{
+  font-size:15px;
+  line-height:1.6;
+  color:rgba(20,17,15,.62);
+  max-width:520px;
+  margin:0 auto 36px;
+}
+
+.arrival-confirm{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:16px 32px;
+  background:var(--ink);
+  color:var(--cream);
+  border-radius:999px;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:.04em;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 16px 38px rgba(20,17,15,.22);
+  transition:all .3s ease;
+}
+.arrival-confirm:hover{
+  transform:translateY(-2px);
+  box-shadow:0 22px 50px rgba(20,17,15,.30);
+}
+.arrival-confirm svg{
+  width:14px;height:14px;
+  stroke:var(--gold);
+  fill:none;
+  stroke-width:2;
+}
+
+/* ======================== PORTA 2 - TERMOMETER ======================== */
+.thermo-wrap{
+  background:rgba(255,250,242,.68);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:38px;
+  box-shadow:var(--soft);
+}
+.thermo-q{
+  font-family:"Cormorant Garamond", serif;
+  font-size:clamp(24px, 3.2vw, 32px);
+  line-height:1.16;
+  margin:0 0 8px;
+  color:var(--ink);
+  letter-spacing:-.02em;
+}
+.thermo-q em{ font-style:italic; color:var(--bronze-deep) }
+.thermo-hint{
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(20,17,15,.55);
+  font-style:italic;
+  margin:0 0 24px;
+}
+
+.thermo-display{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:14px;
+}
+.thermo-num{
+  font-family:"Cormorant Garamond", serif;
+  font-size:clamp(80px, 12vw, 128px);
+  line-height:1;
+  font-weight:600;
+  color:var(--ink);
+  font-variant-numeric:tabular-nums;
+  transition:color .4s ease;
+  letter-spacing:-.04em;
+}
+.thermo-of{
+  font-family:"Cormorant Garamond", serif;
+  font-size:24px;
+  line-height:1;
+  color:rgba(20,17,15,.32);
+  font-style:italic;
+  margin-bottom:14px;
+}
+
+.thermo-track-wrap{
+  position:relative;
+  height:48px;
+  display:flex;
+  align-items:center;
+  margin:18px 0 8px;
+}
+.thermo-rail{
+  position:absolute;
+  left:0;right:0;
+  height:8px;
+  border-radius:999px;
+  background:rgba(20,17,15,.08);
+  overflow:hidden;
+}
+.thermo-fill{
+  height:100%;
+  background:linear-gradient(90deg, #c1a47a 0%, var(--bronze) 50%, var(--bronze-deep) 100%);
+  border-radius:999px;
+  transition:width .4s cubic-bezier(.2,.8,.2,1);
+  width:0%;
+}
+.thermo-input{
+  position:relative;
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  background:transparent;
+  height:48px;
+  margin:0;
+  cursor:pointer;
+  z-index:2;
+}
+.thermo-input::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--ink);
+  border:4px solid var(--cream);
+  box-shadow:0 8px 22px rgba(20,17,15,.30);
+  cursor:grab;
+  transition:transform .2s ease;
+}
+.thermo-input::-webkit-slider-thumb:active{ transform:scale(1.1) }
+.thermo-input::-moz-range-thumb{
+  width:32px;height:32px;
+  border-radius:50%;
+  background:var(--ink);
+  border:4px solid var(--cream);
+  box-shadow:0 8px 22px rgba(20,17,15,.30);
+  cursor:grab;
+}
+.thermo-scale{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:rgba(20,17,15,.45);
+  font-weight:600;
+  font-style:italic;
+}
+
+.thermo-feedback{
+  margin-top:24px;
+  padding:18px 22px;
+  background:rgba(214,167,95,.10);
+  border-left:3px solid var(--gold);
+  border-radius:6px;
+  font-family:"Cormorant Garamond", serif;
+  font-style:italic;
+  font-size:18px;
+  line-height:1.4;
+  color:var(--ink);
+  display:none;
+}
+.thermo-feedback.show{ display:block; animation:fadeIn .4s ease }
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(8px)}
+  to{opacity:1; transform:translateY(0)}
+}
+
+/* ======================== PORTA 3 - DIAGNOSTIC ELO ======================== */
+.elo-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+.elo-pillar{
+  background:rgba(255,250,242,.68);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px 26px;
+}
+.elo-pillar-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:6px;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.elo-pillar-name{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-family:"Cormorant Garamond", serif;
+  font-size:22px;
+  font-weight:600;
+  color:var(--ink);
+  letter-spacing:-.015em;
+}
+.elo-pillar-icon{
+  width:30px;height:30px;
+  border-radius:50%;
+  background:linear-gradient(135deg, var(--bronze), var(--bronze-deep));
+  display:grid;place-items:center;
+}
+.elo-pillar-icon svg{width:14px;height:14px;stroke:var(--cream);fill:none;stroke-width:1.8}
+
+.elo-pillar-avg{
+  font-family:"Cormorant Garamond", serif;
+  font-size:32px;
+  font-weight:600;
+  color:var(--bronze-deep);
+  font-variant-numeric:tabular-nums;
+  font-style:italic;
+}
+.elo-pillar-avg .of{
+  font-size:16px;
+  color:rgba(20,17,15,.32);
+}
+
+.elo-questions{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-top:14px;
+}
+.elo-q{
+  display:grid;
+  grid-template-columns:1fr 200px;
+  gap:14px;
+  align-items:center;
+}
+@media (max-width:680px){ .elo-q{ grid-template-columns:1fr; gap:6px } }
+
+.elo-q-text{
+  font-size:14px;
+  line-height:1.45;
+  color:rgba(20,17,15,.78);
+}
+.elo-q-text em{
+  font-style:italic;
+  color:var(--bronze-deep);
+}
+
+.elo-slider-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.elo-slider{
+  flex:1;
+  -webkit-appearance:none;
+  appearance:none;
+  height:6px;
+  background:rgba(20,17,15,.08);
+  border-radius:999px;
+  cursor:pointer;
+  margin:0;
+}
+.elo-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:18px;height:18px;
+  border-radius:50%;
+  background:var(--bronze);
+  border:2px solid var(--cream);
+  cursor:pointer;
+  box-shadow:0 3px 8px rgba(20,17,15,.20);
+}
+.elo-slider::-moz-range-thumb{
+  width:18px;height:18px;
+  border-radius:50%;
+  background:var(--bronze);
+  border:2px solid var(--cream);
+  cursor:pointer;
+}
+.elo-slider-val{
+  flex:0 0 auto;
+  font-family:"Cormorant Garamond", serif;
+  font-style:italic;
+  font-size:18px;
+  color:var(--bronze-deep);
+  font-variant-numeric:tabular-nums;
+  width:30px;
+  text-align:right;
+}
+
+/* Radar visualization */
+.elo-radar-wrap{
+  margin-top:28px;
+  padding:30px;
+  background:rgba(255,250,242,.5);
+  border-radius:20px;
+  border:1px dashed rgba(166,103,62,.28);
+  display:none;
+}
+.elo-radar-wrap.show{ display:block; animation:fadeIn .5s ease }
+.elo-radar-head{
+  text-align:center;
+  margin-bottom:18px;
+}
+.elo-radar-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--bronze-deep);
+  margin-bottom:6px;
+}
+.elo-radar-title{
+  font-family:"Cormorant Garamond", serif;
+  font-size:26px;
+  font-weight:600;
+  color:var(--ink);
+  letter-spacing:-.02em;
+}
+.elo-radar-svg{
+  display:block;
+  margin:0 auto;
+  max-width:380px;
+  width:100%;
+}
+.elo-radar-insight{
+  margin-top:18px;
+  padding:18px 22px;
+  background:rgba(20,17,15,.04);
+  border-radius:10px;
+  font-family:"Cormorant Garamond", serif;
+  font-style:italic;
+  font-size:18px;
+  line-height:1.4;
+  color:var(--ink);
+  text-align:center;
+}
+.elo-radar-insight strong{
+  font-style:normal;
+  font-weight:600;
+  color:var(--bronze-deep);
+}
+
+/* ======================== PORTA 4 - BIG FIVE ======================== */
+.bf-grid{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.bf-dim{
+  background:rgba(255,250,242,.68);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:22px 24px;
+}
+.bf-dim-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.bf-dim-letter{
+  width:34px;height:34px;
+  border-radius:10px;
+  background:linear-gradient(135deg, var(--bronze) 0%, var(--bronze-deep) 100%);
+  color:var(--cream);
+  display:grid;place-items:center;
+  font-family:"Cormorant Garamond", serif;
+  font-style:italic;
+  font-size:18px;
+  font-weight:600;
+  flex:0 0 auto;
+}
+.bf-dim-name{
+  font-family:"Cormorant Garamond", serif;
+  font-size:20px;
+  font-weight:600;
+  color:var(--ink);
+  letter-spacing:-.015em;
+}
+.bf-dim-name small{
+  display:block;
+  font-family:"Manrope", sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.06em;
+  color:rgba(20,17,15,.5);
+  font-style:italic;
+  margin-top:2px;
+}
+
+.bf-q{
+  display:grid;
+  grid-template-columns:1fr 200px;
+  gap:14px;
+  align-items:center;
+  padding:10px 0;
+}
+.bf-q + .bf-q{ border-top:1px dashed rgba(20,17,15,.06) }
+@media (max-width:680px){ .bf-q{ grid-template-columns:1fr; gap:6px } }
+.bf-q-text{
+  font-size:13.5px;
+  line-height:1.45;
+  color:rgba(20,17,15,.78);
+}
+.bf-slider-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:11px;
+  color:var(--taupe);
+  font-style:italic;
+}
+.bf-slider-wrap span:first-child{ min-width:60px; text-align:right }
+.bf-slider-wrap span:last-child{ min-width:60px }
+.bf-slider{
+  flex:1;
+  -webkit-appearance:none;
+  appearance:none;
+  height:5px;
+  background:rgba(20,17,15,.08);
+  border-radius:999px;
+  cursor:pointer;
+  margin:0;
+}
+.bf-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:16px;height:16px;
+  border-radius:50%;
+  background:var(--bronze);
+  border:2px solid var(--cream);
+  cursor:pointer;
+}
+.bf-slider::-moz-range-thumb{
+  width:16px;height:16px;
+  border-radius:50%;
+  background:var(--bronze);
+  border:2px solid var(--cream);
+  cursor:pointer;
+}
+
+/* Personality summary card (after BF complete) */
+.personality{
+  margin-top:26px;
+  padding:28px;
+  background:linear-gradient(135deg, var(--ink) 0%, var(--cacao) 100%);
+  color:var(--cream);
+  border-radius:20px;
+  display:none;
+  position:relative;
+  overflow:hidden;
+}
+.personality:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 80% 20%, rgba(214,167,95,.16), transparent 50%);
+  pointer-events:none;
+}
+.personality > *{ position:relative; z-index:1 }
+.personality.show{ display:block; animation:fadeIn .5s ease }
+.personality-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:8px;
+}
+.personality-title{
+  font-family:"Cormorant Garamond", serif;
+  font-size:28px;
+  font-weight:600;
+  font-style:italic;
+  margin:0 0 18px;
+  line-height:1.15;
+  letter-spacing:-.02em;
+}
+.personality-traits{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:10px;
+}
+@media (max-width:560px){ .personality-traits{ grid-template-columns:1fr } }
+.trait{
+  background:rgba(255,250,242,.06);
+  border:1px solid rgba(255,250,242,.14);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.trait-name{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.16em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+.trait-level{
+  font-family:"Cormorant Garamond", serif;
+  font-size:18px;
+  font-weight:600;
+  font-style:italic;
+  color:var(--cream);
+  margin-bottom:6px;
+}
+.trait-implication{
+  font-size:12px;
+  line-height:1.45;
+  color:rgba(255,250,242,.62);
+  font-style:italic;
+}
+
+/* ======================== PORTA 5 - ACTIVITY ANCHOR ======================== */
+.activity-q{
+  font-family:"Cormorant Garamond", serif;
+  font-size:clamp(22px, 2.8vw, 28px);
+  line-height:1.18;
+  color:var(--ink);
+  margin:0 0 8px;
+  letter-spacing:-.02em;
+}
+.activity-q em{ font-style:italic; color:var(--bronze-deep) }
+.activity-hint{
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(20,17,15,.55);
+  font-style:italic;
+  margin:0 0 18px;
+}
+.activity-input{
+  width:100%;
+  min-height:80px;
+  background:rgba(255,250,242,.68);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 18px;
+  font-family:"Cormorant Garamond", serif;
+  font-size:18px;
+  line-height:1.4;
+  color:var(--ink);
+  resize:vertical;
+  outline:none;
+  transition:border-color .25s ease;
+}
+.activity-input:focus{ border-color:var(--bronze) }
+.activity-input::placeholder{
+  color:rgba(20,17,15,.30);
+  font-style:italic;
+}
+
+.activity-where{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:10px;
+  margin-top:18px;
+}
+@media (max-width:640px){ .activity-where{ grid-template-columns:1fr } }
+.where-cell{
+  background:rgba(255,250,242,.5);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px 16px;
+}
+.where-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--bronze-deep);
+  margin-bottom:6px;
+}
+.where-q{
+  font-size:13px;
+  line-height:1.4;
+  color:var(--ink);
+  margin:0 0 8px;
+  font-style:italic;
+}
+.where-input{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--line-strong);
+  padding:6px 0;
+  font-family:inherit;
+  font-size:13px;
+  color:var(--ink);
+  outline:none;
+}
+.where-input:focus{ border-bottom-color:var(--bronze) }
+.where-input::placeholder{
+  color:rgba(20,17,15,.30);
+  font-style:italic;
+}
+
+/* ======================== PORTA 6 - 80/20 ======================== */
+.split-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media (max-width:680px){ .split-grid{ grid-template-columns:1fr } }
+.split-cell{
+  border-radius:18px;
+  padding:24px;
+  border:1px solid var(--line);
+}
+.split-cell.twenty{
+  background:linear-gradient(135deg, var(--ink) 0%, var(--cacao) 100%);
+  color:var(--cream);
+  border:none;
+  position:relative;
+  overflow:hidden;
+}
+.split-cell.twenty:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 80% 20%, rgba(214,167,95,.16), transparent 50%);
+  pointer-events:none;
+}
+.split-cell.twenty > *{ position:relative; z-index:1 }
+.split-cell.eighty{
+  background:linear-gradient(135deg, #fbf5ea 0%, var(--sand) 100%);
+  border-color:rgba(166,103,62,.22);
+}
+.split-pct{
+  font-family:"Cormorant Garamond", serif;
+  font-size:48px;
+  font-weight:600;
+  font-style:italic;
+  line-height:1;
+  margin-bottom:6px;
+  letter-spacing:-.03em;
+}
+.split-cell.twenty .split-pct{ color:var(--gold) }
+.split-cell.eighty .split-pct{ color:var(--bronze-deep) }
+.split-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:14px;
+}
+.split-cell.twenty .split-tag{ color:rgba(255,250,242,.62) }
+.split-cell.eighty .split-tag{ color:rgba(20,17,15,.55) }
+.split-q{
+  font-family:"Cormorant Garamond", serif;
+  font-size:18px;
+  line-height:1.25;
+  margin:0 0 14px;
+  font-style:italic;
+  letter-spacing:-.01em;
+}
+.split-cell.twenty .split-q{ color:var(--cream) }
+.split-cell.eighty .split-q{ color:var(--ink) }
+
+.split-input{
+  width:100%;
+  min-height:90px;
+  border-radius:10px;
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:13.5px;
+  line-height:1.5;
+  resize:vertical;
+  outline:none;
+  border:1px solid;
+  transition:border-color .25s ease;
+}
+.split-cell.twenty .split-input{
+  background:rgba(255,250,242,.06);
+  border-color:rgba(255,250,242,.14);
+  color:var(--cream);
+}
+.split-cell.twenty .split-input::placeholder{
+  color:rgba(255,250,242,.32);
+  font-style:italic;
+}
+.split-cell.twenty .split-input:focus{
+  border-color:rgba(214,167,95,.4);
+}
+.split-cell.eighty .split-input{
+  background:rgba(255,255,255,.6);
+  border-color:var(--line);
+  color:var(--ink);
+}
+.split-cell.eighty .split-input::placeholder{
+  color:rgba(20,17,15,.30);
+  font-style:italic;
+}
+.split-cell.eighty .split-input:focus{ border-color:var(--bronze) }
+
+/* ======================== PORTA 7 - FEAR ======================== */
+.fear-q{
+  font-family:"Cormorant Garamond", serif;
+  font-style:italic;
+  font-size:clamp(28px, 4vw, 40px);
+  line-height:1.12;
+  letter-spacing:-.02em;
+  color:var(--cream);
+  margin:0 0 22px;
+  max-width:680px;
+}
+.fear-q span{
+  display:inline-block;
+  position:relative;
+  color:var(--gold);
+}
+.fear-q span:after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  bottom:-2px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(214,167,95,.5), transparent);
+}
+.fear-area{
+  width:100%;
+  min-height:120px;
+  background:rgba(255,250,242,.06);
+  border:1px solid rgba(255,250,242,.14);
+  border-radius:14px;
+  padding:18px 20px;
+  font-family:inherit;
+  font-size:15px;
+  line-height:1.55;
+  color:var(--cream);
+  resize:vertical;
+  outline:none;
+  transition:all .25s ease;
+}
+.fear-area::placeholder{
+  color:rgba(255,250,242,.32);
+  font-style:italic;
+}
+.fear-area:focus{
+  border-color:rgba(214,167,95,.4);
+  background:rgba(255,250,242,.10);
+}
+.fear-foot{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px dashed rgba(214,167,95,.22);
+  font-size:13px;
+  line-height:1.5;
+  color:rgba(255,250,242,.56);
+  font-style:italic;
+  max-width:560px;
+}
+.fear-foot strong{
+  font-style:normal;
+  font-weight:600;
+  color:rgba(255,250,242,.78);
+}
+
+/* ======================== PORTA 8 - DESTINATION (team toggle) ======================== */
+.team-toggle{
+  display:flex;
+  gap:8px;
+  margin-bottom:24px;
+  padding:6px;
+  background:rgba(20,17,15,.05);
+  border-radius:14px;
+  border:1px solid var(--line);
+}
+.team-opt{
+  flex:1;
+  padding:14px 16px;
+  background:transparent;
+  border:none;
+  border-radius:10px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.04em;
+  color:rgba(20,17,15,.6);
+  cursor:pointer;
+  transition:all .25s ease;
+}
+.team-opt:hover{ color:var(--ink) }
+.team-opt.on{
+  background:var(--ink);
+  color:var(--cream);
+  box-shadow:0 6px 14px rgba(20,17,15,.18);
+}
+
+.dest-zones{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:12px;
+  margin-bottom:24px;
+}
+@media (max-width:780px){ .dest-zones{ grid-template-columns:1fr } }
+
+.dest-zone{
+  background:rgba(255,250,242,.6);
+  border:1.5px solid var(--line);
+  border-radius:16px;
+  padding:18px 20px;
+  cursor:pointer;
+  transition:all .25s ease;
+}
+.dest-zone:hover{
+  border-color:rgba(166,103,62,.32);
+  transform:translateY(-2px);
+}
+.dest-zone.on{
+  background:var(--ink);
+  color:var(--cream);
+  border-color:var(--ink);
+  box-shadow:0 14px 32px rgba(20,17,15,.22);
+}
+.dest-zone-icon{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:rgba(166,103,62,.12);
+  display:grid;place-items:center;
+  margin-bottom:10px;
+  transition:background .25s ease;
+}
+.dest-zone.on .dest-zone-icon{ background:rgba(214,167,95,.18) }
+.dest-zone-icon svg{
+  width:16px;height:16px;
+  stroke:var(--bronze-deep);
+  fill:none;
+  stroke-width:1.8;
+  transition:stroke .25s ease;
+}
+.dest-zone.on .dest-zone-icon svg{ stroke:var(--gold) }
+.dest-zone-name{
+  font-family:"Cormorant Garamond", serif;
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:-.015em;
+  margin-bottom:4px;
+}
+.dest-zone-desc{
+  font-size:12px;
+  line-height:1.45;
+  font-style:italic;
+  opacity:.7;
+}
+
+.dest-detail{
+  background:rgba(255,250,242,.5);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:20px 22px;
+  display:none;
+}
+.dest-detail.show{ display:block; animation:fadeIn .4s ease }
+.dest-detail-q{
+  font-family:"Cormorant Garamond", serif;
+  font-size:17px;
+  line-height:1.25;
+  font-style:italic;
+  color:var(--ink);
+  margin:0 0 10px;
+}
+.dest-detail-input{
+  width:100%;
+  min-height:70px;
+  background:rgba(255,255,255,.6);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:14px;
+  line-height:1.5;
+  color:var(--ink);
+  resize:vertical;
+  outline:none;
+}
+.dest-detail-input:focus{ border-color:var(--bronze) }
+.dest-detail-input::placeholder{
+  color:rgba(20,17,15,.30);
+  font-style:italic;
+}
+.dest-detail + .dest-detail{ margin-top:10px }
+
+/* ======================== PORTA 9 - PERSONALIZED ACTION ======================== */
+.action-intro{
+  background:rgba(255,250,242,.5);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px 22px;
+  margin-bottom:18px;
+  font-size:13.5px;
+  line-height:1.55;
+  color:rgba(20,17,15,.7);
+  font-style:italic;
+}
+.action-intro strong{
+  font-style:normal;
+  font-weight:600;
+  color:var(--ink);
+}
+
+.action-card{
+  background:linear-gradient(135deg, var(--ink) 0%, var(--cacao) 100%);
+  color:var(--cream);
+  border-radius:22px;
+  padding:32px;
+  margin-bottom:22px;
+  position:relative;
+  overflow:hidden;
+}
+.action-card:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 85% 15%, rgba(214,167,95,.16), transparent 50%);
+  pointer-events:none;
+}
+.action-card > *{ position:relative; z-index:1 }
+.action-card-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.2em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.action-card-title{
+  font-family:"Cormorant Garamond", serif;
+  font-size:clamp(24px, 3.4vw, 32px);
+  line-height:1.18;
+  font-weight:500;
+  font-style:italic;
+  letter-spacing:-.02em;
+  margin:0 0 18px;
+}
+.action-input{
+  width:100%;
+  min-height:110px;
+  background:rgba(255,250,242,.06);
+  border:1px solid rgba(255,250,242,.18);
+  border-radius:14px;
+  padding:16px 18px;
+  font-family:"Cormorant Garamond", serif;
+  font-size:18px;
+  line-height:1.4;
+  color:var(--cream);
+  resize:vertical;
+  outline:none;
+  letter-spacing:-.005em;
+  transition:all .25s ease;
+}
+.action-input::placeholder{
+  color:rgba(255,250,242,.32);
+  font-style:italic;
+}
+.action-input:focus{
+  border-color:rgba(214,167,95,.4);
+  background:rgba(255,250,242,.10);
+}
+
+.action-tips{
+  margin-top:18px;
+  padding:16px 18px;
+  background:rgba(214,167,95,.10);
+  border-left:3px solid var(--gold);
+  border-radius:6px;
+  display:none;
+}
+.action-tips.show{ display:block; animation:fadeIn .4s ease }
+.action-tips-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.action-tips-text{
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(255,250,242,.82);
+  font-style:italic;
+  margin:0;
+}
+.action-tips-text strong{ font-style:normal; color:var(--cream); font-weight:600 }
+
+/* ======================== PORTA 10 - DAILY PROOFS ======================== */
+.week-grid{
+  display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  gap:8px;
+  margin-bottom:20px;
+}
+@media (max-width:680px){ .week-grid{ grid-template-columns:repeat(2, 1fr) } }
+.day{
+  background:rgba(255,250,242,.6);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 12px;
+  text-align:center;
+  position:relative;
+}
+.day-name{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--bronze-deep);
+  margin-bottom:8px;
+}
+.day-icon{
+  width:28px;height:28px;
+  margin:0 auto 8px;
+  border-radius:50%;
+  background:rgba(166,103,62,.10);
+  display:grid;place-items:center;
+}
+.day-icon svg{width:13px;height:13px;stroke:var(--bronze);fill:none;stroke-width:1.8}
+.day-proof{
+  font-size:11px;
+  line-height:1.35;
+  color:rgba(20,17,15,.62);
+  margin:0;
+  font-style:italic;
+  min-height:50px;
+}
+
+.contract{
+  background:linear-gradient(135deg, #fbf5ea 0%, var(--sand) 100%);
+  border:1px solid rgba(166,103,62,.22);
+  border-radius:22px;
+  padding:32px;
+  position:relative;
+  margin-top:24px;
+}
+.contract:before{
+  content:"";
+  position:absolute;
+  top:-1px; left:-1px; right:-1px;
+  height:4px;
+  background:linear-gradient(90deg, var(--bronze) 0%, var(--gold) 50%, var(--bronze-deep) 100%);
+  border-radius:22px 22px 0 0;
+}
+.contract-title{
+  font-family:"Cormorant Garamond", serif;
+  font-size:26px;
+  font-weight:600;
+  font-style:italic;
+  margin:0 0 14px;
+  color:var(--ink);
+  letter-spacing:-.02em;
+}
+.contract-body{
+  font-size:14px;
+  line-height:1.6;
+  color:rgba(20,17,15,.78);
+  margin-bottom:22px;
+}
+.contract-body strong{
+  font-weight:700;
+  color:var(--ink);
+}
+
+.contract-sign{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:18px;
+}
+@media (max-width:560px){ .contract-sign{ grid-template-columns:1fr } }
+.sign-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.sign-label{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--bronze-deep);
+}
+.sign-input{
+  background:transparent;
+  border:none;
+  border-bottom:2px solid var(--line-strong);
+  padding:8px 0;
+  font-family:"Cormorant Garamond", serif;
+  font-size:22px;
+  color:var(--ink);
+  outline:none;
+  font-style:italic;
+}
+.sign-input:focus{ border-bottom-color:var(--bronze) }
+
+/* ======================== FINAL - CARTÃO + LEITURA MEL ======================== */
+.final-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+}
+
+.cartao{
+  background:linear-gradient(135deg, #fbf5ea 0%, var(--sand) 100%);
+  border:1px solid rgba(166,103,62,.22);
+  border-radius:24px;
+  padding:36px;
+  position:relative;
+}
+.cartao:before{
+  content:"";
+  position:absolute;
+  top:-1px; left:-1px; right:-1px;
+  height:4px;
+  background:linear-gradient(90deg, var(--bronze) 0%, var(--gold) 50%, var(--bronze-deep) 100%);
+  border-radius:24px 24px 0 0;
+}
+.cartao-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--bronze-deep);
+  margin-bottom:6px;
+}
+.cartao-title{
+  font-family:"Cormorant Garamond", serif;
+  font-size:34px;
+  font-weight:600;
+  letter-spacing:-.025em;
+  margin:0 0 22px;
+  color:var(--ink);
+}
+.cartao-section{
+  margin-bottom:18px;
+  padding-bottom:18px;
+  border-bottom:1px dashed rgba(166,103,62,.22);
+}
+.cartao-section:last-child{ border-bottom:none; padding-bottom:0; margin-bottom:0 }
+.cartao-section-label{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--bronze-deep);
+  margin-bottom:6px;
+}
+.cartao-section-content{
+  font-family:"Cormorant Garamond", serif;
+  font-size:18px;
+  line-height:1.4;
+  color:var(--ink);
+  letter-spacing:-.005em;
+}
+.cartao-section-content em{ font-style:italic; color:var(--bronze-deep) }
+.cartao-section-empty{
+  font-style:italic;
+  color:var(--taupe);
+  opacity:.6;
+}
+
+/* Mel reading panel - hidden by default */
+.mel-reading{
+  display:none;
+  background:linear-gradient(135deg, var(--ink) 0%, var(--cacao) 100%);
+  color:var(--cream);
+  border-radius:24px;
+  padding:36px;
+  position:relative;
+  overflow:hidden;
+}
+body.mel-mode .mel-reading{ display:block }
+.mel-reading:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at 85% 15%, rgba(214,167,95,.16), transparent 50%);
+  pointer-events:none;
+}
+.mel-reading > *{ position:relative; z-index:1 }
+.mel-reading-tag{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.2em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.mel-reading-title{
+  font-family:"Cormorant Garamond", serif;
+  font-size:30px;
+  font-weight:600;
+  font-style:italic;
+  margin:0 0 22px;
+  letter-spacing:-.02em;
+}
+.mr-section{
+  margin-bottom:16px;
+  padding:14px 18px;
+  background:rgba(255,250,242,.06);
+  border:1px solid rgba(255,250,242,.12);
+  border-radius:12px;
+}
+.mr-section-label{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.16em;
+  color:var(--gold);
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+.mr-section-content{
+  font-size:13.5px;
+  line-height:1.5;
+  color:rgba(255,250,242,.85);
+}
+.mr-section-content strong{
+  color:var(--cream);
+  font-weight:600;
+}
+
+/* ======================== ACTIONS (final) ======================== */
+.final-actions{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:32px;
+  flex-wrap:wrap;
+}
+
+/* ======================== UTILITIES ======================== */
+.field-label{
+  display:block;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--bronze-deep);
+  margin-bottom:6px;
+}
+
+/* Print */
+@media print{
+  body{ background:#fff }
+  body:before{ display:none }
+  .rail, .nav-controls, .mel-pause, .final-actions{ display:none }
+  .app{ grid-template-columns:1fr }
+  .porta{ display:block !important; page-break-after:always }
+  .card.dark, .action-card, .split-cell.twenty, .mel-reading{
+    background:#231815 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  .card.gold, .cartao, .split-cell.eighty, .contract{
+    background:#fbf5ea !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+}
+
+/* ======================== MOBILE ======================== */
+@media (max-width:640px){
+  .main{ padding:32px 18px 80px }
+  .card, .thermo-wrap{ padding:24px 22px }
+  .arrival{ padding:36px 14px }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ======================== RAIL ======================== -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <div class="rail-logo">
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="bronze" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#c98a5a"/>
+              <stop offset="50%" stop-color="#a6673e"/>
+              <stop offset="100%" stop-color="#6e3b2e"/>
+            </linearGradient>
+          </defs>
+          <g fill="none" stroke="url(#bronze)" stroke-width="3.4" stroke-linecap="round">
+            <ellipse cx="50" cy="36" rx="22" ry="28" transform="rotate(-15 50 36)"/>
+            <ellipse cx="36" cy="62" rx="22" ry="28" transform="rotate(60 36 62)"/>
+            <ellipse cx="64" cy="62" rx="22" ry="28" transform="rotate(-60 64 62)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="rail-brand-text">
+        Jornada ELO
+        <small>Encontro 01</small>
+      </div>
+    </div>
+
+    <div class="rail-progress">
+      <div class="rail-progress-fill" id="progress-fill"></div>
+    </div>
+
+    <nav class="rail-portas" id="rail-portas">
+      <!-- populated by JS -->
+    </nav>
+
+    <div class="rail-foot">
+      <strong>A ferramenta organiza.</strong><br/>
+      A mentora traduz.<br/>
+      A ação transforma.<br/>
+      A prova vicia no processo.
+    </div>
+
+    <div class="mel-badge">Modo Mentora ativado</div>
+  </aside>
+
+  <!-- ======================== MAIN ======================== -->
+  <main class="main">
+
+    <!-- ============================================== -->
+    <!-- PORTA 1 — CHEGADA -->
+    <!-- ============================================== -->
+    <section class="porta show" data-porta="1">
+      <div class="arrival">
+        <div class="arrival-logo">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="bronze2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#c98a5a"/>
+                <stop offset="50%" stop-color="#a6673e"/>
+                <stop offset="100%" stop-color="#6e3b2e"/>
+              </linearGradient>
+            </defs>
+            <g fill="none" stroke="url(#bronze2)" stroke-width="3.4" stroke-linecap="round">
+              <ellipse cx="50" cy="36" rx="22" ry="28" transform="rotate(-15 50 36)"/>
+              <ellipse cx="36" cy="62" rx="22" ry="28" transform="rotate(60 36 62)"/>
+              <ellipse cx="64" cy="62" rx="22" ry="28" transform="rotate(-60 64 62)"/>
+            </g>
+          </svg>
+        </div>
+
+        <h1 class="arrival-statement">
+          Você tá aqui porque <em>cansou.</em><br/>
+          <strong>Não porque é fraca.</strong>
+        </h1>
+        <p class="arrival-sub">
+          Antes da gente começar, eu só preciso que você confirme: você não veio buscar mais uma coisa pra fazer. Veio entender por que tudo virou peso.
+        </p>
+
+        <button class="arrival-confirm" id="arrival-confirm">
+          <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+          Eu tô aqui. Pode começar.
+        </button>
+
+        <div class="mel-pause" style="margin-top:36px; max-width:520px">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span><strong>Pausa da Mel.</strong> A mentora vai falar agora antes de você seguir. Não tem pressa.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 2 — TERMÔMETRO -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="2">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 02 · Como você chegou</span>
+        <h2 class="porta-title">De <em>0 a 10</em>, quanto tá pesando?</h2>
+        <p class="porta-lead">Sem maquiar, sem tentar parecer mais forte do que tá. Só o número que você daria pro seu nível de cansaço hoje.</p>
+      </header>
+
+      <div class="thermo-wrap">
+        <div class="thermo-display">
+          <span class="thermo-num" id="t-num">0</span>
+          <span class="thermo-of">/ 10</span>
+        </div>
+        <div class="thermo-track-wrap">
+          <div class="thermo-rail"><div class="thermo-fill" id="t-fill"></div></div>
+          <input type="range" min="0" max="10" value="0" class="thermo-input" id="t-input">
+        </div>
+        <div class="thermo-scale">
+          <span>tô leve</span>
+          <span>tô no limite</span>
+        </div>
+
+        <div class="thermo-feedback" id="t-feedback"></div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> Esse número que você acabou de marcar — a Mel vai conversar com você sobre ele antes de seguir.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 3 — DIAGNÓSTICO ELO (3 PILARES) -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="3">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 03 · Onde tá o vazamento</span>
+        <h2 class="porta-title">Por onde tua energia <em>escapa?</em></h2>
+        <p class="porta-lead">A gente vai medir três coisas: como você funciona por dentro, como você conduz pessoas, e como sua rotina se sustenta. A nota mais baixa mostra por onde começar.</p>
+      </header>
+
+      <div class="elo-grid" id="elo-grid">
+        <!-- ESSÊNCIA -->
+        <div class="elo-pillar" data-pillar="essencia">
+          <div class="elo-pillar-head">
+            <div class="elo-pillar-name">
+              <div class="elo-pillar-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+              </div>
+              Essência
+            </div>
+            <div class="elo-pillar-avg" data-pillar-avg>—<span class="of">/10</span></div>
+          </div>
+          <div class="elo-questions">
+            <div class="elo-q">
+              <span class="elo-q-text">No fim do dia, eu ainda tenho energia <em>pra mim</em>.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="e1">
+                <span class="elo-slider-val" data-val="e1">5</span>
+              </div>
+            </div>
+            <div class="elo-q">
+              <span class="elo-q-text">Quando bate pressão, eu decido com clareza — <em>sem reagir no impulso</em>.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="e2">
+                <span class="elo-slider-val" data-val="e2">5</span>
+              </div>
+            </div>
+            <div class="elo-q">
+              <span class="elo-q-text">Eu sei diferenciar <em>o que é meu</em> do que peguei pra mim sem precisar.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="e3">
+                <span class="elo-slider-val" data-val="e3">5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIDERANÇA -->
+        <div class="elo-pillar" data-pillar="lideranca">
+          <div class="elo-pillar-head">
+            <div class="elo-pillar-name">
+              <div class="elo-pillar-icon">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              Liderança
+            </div>
+            <div class="elo-pillar-avg" data-pillar-avg>—<span class="of">/10</span></div>
+          </div>
+          <div class="elo-questions">
+            <div class="elo-q">
+              <span class="elo-q-text">Eu consigo <em>passar uma tarefa</em> e não pegar de volta.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="l1">
+                <span class="elo-slider-val" data-val="l1">5</span>
+              </div>
+            </div>
+            <div class="elo-q">
+              <span class="elo-q-text">Minha equipe (ou parceiros) sabem <em>o que esperar</em> de mim e o contrário.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="l2">
+                <span class="elo-slider-val" data-val="l2">5</span>
+              </div>
+            </div>
+            <div class="elo-q">
+              <span class="elo-q-text">As pessoas <em>resolvem coisas sem mim</em> — não me chamam para tudo.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="l3">
+                <span class="elo-slider-val" data-val="l3">5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORGANIZAÇÃO -->
+        <div class="elo-pillar" data-pillar="organizacao">
+          <div class="elo-pillar-head">
+            <div class="elo-pillar-name">
+              <div class="elo-pillar-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              </div>
+              Organização
+            </div>
+            <div class="elo-pillar-avg" data-pillar-avg>—<span class="of">/10</span></div>
+          </div>
+          <div class="elo-questions">
+            <div class="elo-q">
+              <span class="elo-q-text">Tenho <em>ritmo claro</em> pra olhar números, agenda e prioridades toda semana.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="o1">
+                <span class="elo-slider-val" data-val="o1">5</span>
+              </div>
+            </div>
+            <div class="elo-q">
+              <span class="elo-q-text">Se eu sair <em>uma semana</em>, o negócio funciona sem desabar.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="o2">
+                <span class="elo-slider-val" data-val="o2">5</span>
+              </div>
+            </div>
+            <div class="elo-q">
+              <span class="elo-q-text">As coisas que se repetem <em>já têm um jeito</em> definido — não improviso toda vez.</span>
+              <div class="elo-slider-wrap">
+                <input type="range" min="0" max="10" value="5" class="elo-slider" data-q="o3">
+                <span class="elo-slider-val" data-val="o3">5</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="elo-radar-wrap" id="radar-wrap">
+        <div class="elo-radar-head">
+          <div class="elo-radar-tag">Mapa do vazamento</div>
+          <div class="elo-radar-title">Por onde a tua energia escapa</div>
+        </div>
+        <svg class="elo-radar-svg" id="radar" viewBox="-160 -160 320 320">
+          <!-- grid -->
+          <polygon points="0,-100 86.6,50 -86.6,50" fill="none" stroke="rgba(20,17,15,.10)" stroke-width="1"/>
+          <polygon points="0,-66 57.7,33 -57.7,33" fill="none" stroke="rgba(20,17,15,.08)" stroke-width="1"/>
+          <polygon points="0,-33 28.9,17 -28.9,17" fill="none" stroke="rgba(20,17,15,.06)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="0" y2="-100" stroke="rgba(20,17,15,.10)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="86.6" y2="50" stroke="rgba(20,17,15,.10)" stroke-width="1"/>
+          <line x1="0" y1="0" x2="-86.6" y2="50" stroke="rgba(20,17,15,.10)" stroke-width="1"/>
+          <!-- data -->
+          <polygon id="radar-poly" points="0,0 0,0 0,0" fill="rgba(166,103,62,.22)" stroke="#a6673e" stroke-width="2" stroke-linejoin="round"/>
+          <circle id="radar-c1" cx="0" cy="0" r="4" fill="#a6673e"/>
+          <circle id="radar-c2" cx="0" cy="0" r="4" fill="#a6673e"/>
+          <circle id="radar-c3" cx="0" cy="0" r="4" fill="#a6673e"/>
+          <!-- labels -->
+          <text x="0" y="-115" text-anchor="middle" fill="#14110f" font-size="13" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="600">Essência</text>
+          <text x="100" y="65" text-anchor="middle" fill="#14110f" font-size="13" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="600">Liderança</text>
+          <text x="-100" y="65" text-anchor="middle" fill="#14110f" font-size="13" font-family="Cormorant Garamond, serif" font-style="italic" font-weight="600">Organização</text>
+        </svg>
+        <div class="elo-radar-insight" id="radar-insight"></div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> O pilar mais baixo é onde a gente vai começar a trabalhar. A Mel vai te explicar o que isso quer dizer no teu caso.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 4 — BIG FIVE (10 questões, 5 dimensões) -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="4">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 04 · Como você funciona</span>
+        <h2 class="porta-title">Esse jeito que você é <em>é uma força</em>.</h2>
+        <p class="porta-lead">Mas algumas dessas forças viraram prisão. A gente vai mapear seu jeito de ser pra que a ação da semana saia com a tua cara — não no piloto automático.</p>
+      </header>
+
+      <div class="bf-grid" id="bf-grid">
+        <!-- ABERTURA -->
+        <div class="bf-dim" data-dim="abertura">
+          <div class="bf-dim-head">
+            <div class="bf-dim-letter">A</div>
+            <div class="bf-dim-name">
+              Abertura
+              <small>como você se relaciona com o novo</small>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Eu gosto de testar formas novas de fazer — mesmo se a antiga funciona.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="a1">
+              <span>concordo</span>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Quando aparece uma ideia diferente, eu tendo a desconfiar antes de aceitar.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="a2" data-reverse="true">
+              <span>concordo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONSCIENCIOSIDADE -->
+        <div class="bf-dim" data-dim="conscienciosidade">
+          <div class="bf-dim-head">
+            <div class="bf-dim-letter">C</div>
+            <div class="bf-dim-name">
+              Conscienciosidade
+              <small>como você executa</small>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Quando eu começo uma coisa, eu termino — mesmo sem ninguém cobrar.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="c1">
+              <span>concordo</span>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Eu costumo me cobrar bem mais do que cobro qualquer pessoa.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="c2">
+              <span>concordo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EXTROVERSÃO -->
+        <div class="bf-dim" data-dim="extroversao">
+          <div class="bf-dim-head">
+            <div class="bf-dim-letter">E</div>
+            <div class="bf-dim-name">
+              Extroversão
+              <small>de onde você tira energia</small>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Eu me energizo conversando, expondo, vendendo, estando com pessoas.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="e_1">
+              <span>concordo</span>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Conversa difícil me esgota — adio sempre que dá.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="e_2" data-reverse="true">
+              <span>concordo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AMABILIDADE -->
+        <div class="bf-dim" data-dim="amabilidade">
+          <div class="bf-dim-head">
+            <div class="bf-dim-letter">M</div>
+            <div class="bf-dim-name">
+              Amabilidade
+              <small>como você lida com as pessoas</small>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Tenho dificuldade de impor padrão — fico com medo da pessoa achar que sou dura.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="m1">
+              <span>concordo</span>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Eu costumo absorver desconforto pra evitar atrito.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="m2">
+              <span>concordo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTABILIDADE -->
+        <div class="bf-dim" data-dim="estabilidade">
+          <div class="bf-dim-head">
+            <div class="bf-dim-letter">N</div>
+            <div class="bf-dim-name">
+              Estabilidade emocional
+              <small>como você reage a erro</small>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Quando algo dá errado, eu rumino por horas — não solto fácil.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="n1">
+              <span>concordo</span>
+            </div>
+          </div>
+          <div class="bf-q">
+            <span class="bf-q-text">Sob pressão, eu mantenho a cabeça no lugar e foco no próximo passo.</span>
+            <div class="bf-slider-wrap">
+              <span>discordo</span>
+              <input type="range" min="0" max="10" value="5" class="bf-slider" data-q="n2" data-reverse="true">
+              <span>concordo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="personality" id="personality">
+        <div class="personality-tag">Sua leitura de personalidade</div>
+        <div class="personality-title" id="personality-title">…</div>
+        <div class="personality-traits" id="personality-traits"></div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> A Mel vai te explicar o que esses traços significam — e como cada um pode estar ajudando ou atrapalhando agora.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 5 — ATIVIDADE-ÂNCORA -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="5">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 05 · A atividade que come seu dia</span>
+        <h2 class="porta-title">Que <em>atividade</em> hoje toma o maior pedaço do seu tempo?</h2>
+        <p class="porta-lead">Não é "um peso". É uma coisa concreta. Aquela atividade que se ela parar, várias outras param junto. Aquela que você não consegue fechar a cabeça enquanto ela existe.</p>
+      </header>
+
+      <div class="card">
+        <p class="activity-q">A atividade que mais consome meu dia hoje é…</p>
+        <p class="activity-hint">Escreve concreto, com nome. Ex.: "responder cliente no WhatsApp"; "conferir cada agendamento da semana"; "aprovar cada compra abaixo de 500 reais".</p>
+        <textarea class="activity-input" id="activity-text" placeholder="A atividade que mais consome meu dia hoje é…"></textarea>
+
+        <div class="activity-where">
+          <div class="where-cell">
+            <div class="where-tag">Quando</div>
+            <p class="where-q">Em que horário ela mais bate?</p>
+            <input type="text" class="where-input" id="activity-when" placeholder="ex.: das 8h às 11h, e à noite">
+          </div>
+          <div class="where-cell">
+            <div class="where-tag">Custo</div>
+            <p class="where-q">O que essa atividade tira de você?</p>
+            <input type="text" class="where-input" id="activity-cost" placeholder="ex.: paciência, presença, sono">
+          </div>
+          <div class="where-cell">
+            <div class="where-tag">Frequência</div>
+            <p class="where-q">Quantas vezes na semana?</p>
+            <input type="text" class="where-input" id="activity-freq" placeholder="ex.: todo dia; várias vezes ao dia">
+          </div>
+        </div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> Antes de seguir, a Mel vai te ajudar a olhar pra essa atividade de outro ângulo.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 6 — 80/20 -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="6">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 06 · Onde mora o que importa</span>
+        <h2 class="porta-title">Dessa atividade, o que <em>só você</em> pode fazer?</h2>
+        <p class="porta-lead">Quase toda atividade tem dois pedaços: um onde você é insubstituível, e outro onde você se substituiu sem precisar. A gente vai separar esses dois pedaços agora.</p>
+      </header>
+
+      <div class="split-grid">
+        <div class="split-cell twenty">
+          <div class="split-pct">20<span style="font-size:24px">%</span></div>
+          <div class="split-tag">só você consegue</div>
+          <p class="split-q">Que pedaço dessa atividade <em>realmente exige você</em>? O julgamento, a relação, a decisão final — o que ninguém faz no seu lugar?</p>
+          <textarea class="split-input" id="split-mine" placeholder="ex.: a decisão final sobre o desconto; a relação com os clientes-chave"></textarea>
+        </div>
+        <div class="split-cell eighty">
+          <div class="split-pct">80<span style="font-size:24px">%</span></div>
+          <div class="split-tag">não precisa ser você</div>
+          <p class="split-q">Qual pedaço dessa atividade <em>poderia ser feito por outra pessoa, processo, ferramenta — ou simplesmente parar de ser feito</em>?</p>
+          <textarea class="split-input" id="split-rest" placeholder="ex.: a triagem inicial; respostas padronizadas; conferências de rotina"></textarea>
+        </div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> Esse 80% é onde mora a tua próxima semana. A Mel vai te ajudar a enxergar isso melhor.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 7 — O MEDO -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="7">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 07 · O que sustenta a centralização</span>
+        <h2 class="porta-title">A <em>pergunta</em> que ninguém te faz</h2>
+        <p class="porta-lead">Você sabe que esse 80% podia sair da sua mão. Então por que não saiu até agora? A resposta tem nome. E ela mora aqui.</p>
+      </header>
+
+      <div class="card dark">
+        <h3 class="fear-q">O que eu tenho medo que aconteça <span>se eu soltar</span>?</h3>
+        <textarea class="fear-area" id="fear" placeholder="Escreve sem maquiar. O medo nomeado perde força. O medo escondido continua mandando."></textarea>
+        <p class="fear-foot">
+          <strong>Princípio:</strong> esse medo não é defeito de caráter. É o que mantém o padrão de centralização vivo. Reconhecê-lo é o primeiro ato de liderança real.
+        </p>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> Essa é uma das partes mais importantes do encontro. A Mel vai sustentar essa conversa com você.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 8 — DESTINO (com bifurcação equipe/sem equipe) -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="8">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 08 · Pra onde vai esse 80%</span>
+        <h2 class="porta-title">Pra onde esse pedaço <em>vai esta semana?</em></h2>
+        <p class="porta-lead">Existem caminhos diferentes dependendo do seu negócio. A gente escolhe o que cabe na realidade que você tem hoje.</p>
+      </header>
+
+      <div class="card">
+        <span class="field-label">Antes da gente decidir o destino…</span>
+        <div class="team-toggle">
+          <button class="team-opt on" data-team="com">Eu tenho equipe (mesmo que pequena)</button>
+          <button class="team-opt" data-team="sem">Trabalho sozinha (ou só com terceiros pontuais)</button>
+        </div>
+
+        <!-- COM EQUIPE -->
+        <div data-team-block="com">
+          <div class="dest-zones">
+            <div class="dest-zone" data-dest="passar">
+              <div class="dest-zone-icon">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6M19 8v6"/></svg>
+              </div>
+              <div class="dest-zone-name">Passar pra alguém</div>
+              <div class="dest-zone-desc">Uma parte pequena. Pra quem hoje pode assumir.</div>
+            </div>
+            <div class="dest-zone" data-dest="processo">
+              <div class="dest-zone-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3"/></svg>
+              </div>
+              <div class="dest-zone-name">Virar processo</div>
+              <div class="dest-zone-desc">Padrão fixo, qualquer pessoa segue.</div>
+            </div>
+            <div class="dest-zone" data-dest="critério">
+              <div class="dest-zone-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 22s-7-4-7-12a7 7 0 0 1 14 0c0 8-7 12-7 12z"/></svg>
+              </div>
+              <div class="dest-zone-name">Continua comigo</div>
+              <div class="dest-zone-desc">Mas com critério mais claro do que entra ou não.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEM EQUIPE -->
+        <div data-team-block="sem" style="display:none">
+          <div class="dest-zones">
+            <div class="dest-zone" data-dest="automatizar">
+              <div class="dest-zone-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <div class="dest-zone-name">Automatizar</div>
+              <div class="dest-zone-desc">Ferramenta, IA, modelo, agendamento.</div>
+            </div>
+            <div class="dest-zone" data-dest="fracionar">
+              <div class="dest-zone-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+              </div>
+              <div class="dest-zone-name">Fracionar</div>
+              <div class="dest-zone-desc">Fazer só o pedaço de 20% — abandonar o resto.</div>
+            </div>
+            <div class="dest-zone" data-dest="eliminar">
+              <div class="dest-zone-icon">
+                <svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </div>
+              <div class="dest-zone-name">Eliminar</div>
+              <div class="dest-zone-desc">Parar de fazer. Ninguém precisa disso.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DETAIL FIELDS (appear after dest is chosen) -->
+        <div class="dest-detail" id="dest-detail-1">
+          <p class="dest-detail-q" id="dest-q-1">…</p>
+          <textarea class="dest-detail-input" id="dest-i-1" placeholder=""></textarea>
+        </div>
+        <div class="dest-detail" id="dest-detail-2">
+          <p class="dest-detail-q" id="dest-q-2">…</p>
+          <textarea class="dest-detail-input" id="dest-i-2" placeholder=""></textarea>
+        </div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> A Mel vai te ajudar a refinar esse destino antes de virar ação.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 9 — AÇÃO PERSONALIZADA -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="9">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 09 · A ação que tem a tua cara</span>
+        <h2 class="porta-title">Sua ação da semana, <em>com seu jeito de ser</em></h2>
+        <p class="porta-lead">Aqui não é uma ação genérica. A gente vai escrever junto uma ação que cabe no seu perfil — porque o que funciona pra outra mulher pode quebrar você.</p>
+      </header>
+
+      <div class="action-intro" id="action-intro">
+        Antes da Mel sugerir a ação, leia: <strong id="action-intro-text">teu perfil de personalidade ainda não foi gerado.</strong>
+      </div>
+
+      <div class="action-card">
+        <div class="action-card-tag">Compromisso da semana</div>
+        <h3 class="action-card-title">Esta semana eu vou…</h3>
+        <textarea class="action-input" id="action-text" placeholder="A Mel vai sugerir uma ação. Você refina junto com ela. Tem que caber em uma frase clara. Sem 'eu vou tentar'. Com 'eu vou'."></textarea>
+        <div class="action-tips" id="action-tips">
+          <div class="action-tips-tag">Para o seu perfil</div>
+          <p class="action-tips-text" id="action-tips-text"></p>
+        </div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> Essa é a frase que vai pra próxima semana. A Mel não te deixa escrever genérico aqui.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Continuar →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA 10 — PROVA DIÁRIA + CONTRATO -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="10">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Porta 10 · O contrato</span>
+        <h2 class="porta-title">7 dias. <em>7 provas.</em></h2>
+        <p class="porta-lead">Não dá pra fingir que tá fazendo. A cada dia, uma prova pequena de que aconteceu. Se vier todas, você passa para o próximo encontro com história. Se faltar, a gente conversa — sem julgamento, sem desculpa.</p>
+      </header>
+
+      <div class="week-grid" id="week-grid">
+        <!-- 7 dias - populated by JS based on action -->
+      </div>
+
+      <div class="contract">
+        <h3 class="contract-title">Contrato da semana</h3>
+        <div class="contract-body">
+          Eu, abaixo assinada, me comprometo com a ação da semana que escrevi e com as 7 provas diárias acima. Sei que <strong>recaída é dado, não identidade</strong>. Se eu falhar, eu volto. Se eu não fizer nada, eu aviso a Mel antes do próximo encontro. <strong>A meta não é perfeição. É evidência.</strong>
+        </div>
+        <div class="contract-sign">
+          <div class="sign-field">
+            <label class="sign-label" for="sign-name">Assinatura</label>
+            <input type="text" class="sign-input" id="sign-name" placeholder="Seu nome">
+          </div>
+          <div class="sign-field">
+            <label class="sign-label" for="sign-date">Data</label>
+            <input type="date" class="sign-input" id="sign-date">
+          </div>
+        </div>
+      </div>
+
+      <div class="mel-pause">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span><strong>Pausa da Mel.</strong> Antes de você assinar, a Mel vai falar uma última coisa.</span>
+      </div>
+
+      <div class="nav-controls">
+        <button class="btn btn-ghost" data-back>← Voltar</button>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+          <button class="btn btn-primary" data-next disabled>Ver meu cartão da semana →</button>
+          <span class="lock-message"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> espera a Mel liberar</span>
+          <button class="mel-unlock" data-unlock>
+            <svg viewBox="0 0 24 24"><path d="M5 11V7a7 7 0 0 1 14 0"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
+            Liberar próxima porta
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- PORTA FINAL — CARTÃO DA ALUNA + LEITURA MEL -->
+    <!-- ============================================== -->
+    <section class="porta" data-porta="11">
+      <header class="porta-header">
+        <span class="porta-eyebrow">Encontro fechado</span>
+        <h2 class="porta-title">O que você <em>leva</em> dessa hora</h2>
+        <p class="porta-lead">Tudo que você descobriu, decidiu e assinou hoje, em uma página. Imprime, salva no celular, prega na parede — e cumpre.</p>
+      </header>
+
+      <div class="final-grid">
+
+        <div class="cartao" id="cartao">
+          <div class="cartao-tag">Meu cartão da semana</div>
+          <h3 class="cartao-title">A Virada da Líder</h3>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">Como cheguei hoje</div>
+            <div class="cartao-section-content" id="card-arrival"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">Onde tá o vazamento</div>
+            <div class="cartao-section-content" id="card-pillar"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">Atividade que come meu dia</div>
+            <div class="cartao-section-content" id="card-activity"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">Os 20% que importam</div>
+            <div class="cartao-section-content" id="card-mine"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">O 80% que sai esta semana</div>
+            <div class="cartao-section-content" id="card-rest"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">O medo que eu nomeei</div>
+            <div class="cartao-section-content" id="card-fear"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">Ação da semana</div>
+            <div class="cartao-section-content" id="card-action"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">7 provas</div>
+            <div class="cartao-section-content" id="card-proofs" style="font-size:14px;"><span class="cartao-section-empty">…</span></div>
+          </div>
+
+          <div class="cartao-section">
+            <div class="cartao-section-label">Assinatura</div>
+            <div class="cartao-section-content" id="card-sign"><span class="cartao-section-empty">…</span></div>
+          </div>
+        </div>
+
+        <!-- MEL ONLY -->
+        <div class="mel-reading" id="mel-reading">
+          <div class="mel-reading-tag">Leitura estratégica · só para a Mel</div>
+          <h3 class="mel-reading-title">Quem é essa mulher que tá sentada na sua frente</h3>
+
+          <div class="mr-section">
+            <div class="mr-section-label">Termômetro de chegada</div>
+            <div class="mr-section-content" id="mr-thermo">—</div>
+          </div>
+
+          <div class="mr-section">
+            <div class="mr-section-label">Pilar mais frágil (ELO)</div>
+            <div class="mr-section-content" id="mr-pillar">—</div>
+          </div>
+
+          <div class="mr-section">
+            <div class="mr-section-label">Perfil de personalidade</div>
+            <div class="mr-section-content" id="mr-personality">—</div>
+          </div>
+
+          <div class="mr-section">
+            <div class="mr-section-label">Sintoma comportamental a observar</div>
+            <div class="mr-section-content" id="mr-symptom">—</div>
+          </div>
+
+          <div class="mr-section">
+            <div class="mr-section-label">3 padrões de risco para acompanhar</div>
+            <div class="mr-section-content" id="mr-risks">—</div>
+          </div>
+
+          <div class="mr-section">
+            <div class="mr-section-label">Gancho do próximo encontro</div>
+            <div class="mr-section-content" id="mr-hook">—</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="final-actions">
+        <button class="btn btn-primary" id="btn-print">
+          <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimir / salvar PDF
+        </button>
+        <button class="btn btn-ghost" data-back>← Revisar</button>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+(function(){
+  const $  = (s, c) => (c||document).querySelector(s);
+  const $$ = (s, c) => [...(c||document).querySelectorAll(s)];
+
+  // ============ MEL MODE DETECTION ============
+  const params = new URLSearchParams(location.search);
+  if (params.get('mel') === '1') document.body.classList.add('mel-mode');
+
+  // ============ STATE ============
+  const TOTAL_PORTAS = 11;
+  const portaNames = [
+    {n:1,  name:'Chegada'},
+    {n:2,  name:'Termômetro'},
+    {n:3,  name:'Diagnóstico ELO'},
+    {n:4,  name:'Personalidade'},
+    {n:5,  name:'Atividade-âncora'},
+    {n:6,  name:'80 / 20'},
+    {n:7,  name:'O medo'},
+    {n:8,  name:'Destino'},
+    {n:9,  name:'Ação da semana'},
+    {n:10, name:'Contrato + provas'},
+    {n:11, name:'Cartão final'}
+  ];
+  let currentPorta = 1;
+  let unlocked = new Set([1, 2]); // porta 1 always unlocked, 2 unlocks after arrival confirm
+  let portasFilled = new Set(); // portas the student has interacted with enough
+
+  // ============ RAIL RENDER ============
+  function renderRail(){
+    const rail = $('#rail-portas');
+    rail.innerHTML = portaNames.map(p => {
+      let cls = 'rail-porta';
+      if (p.n === currentPorta) cls += ' active';
+      else if (portasFilled.has(p.n)) cls += ' done';
+      else if (!unlocked.has(p.n)) cls += ' locked';
+      const icon = portasFilled.has(p.n)
+        ? '<svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>'
+        : (unlocked.has(p.n) ? '' : '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>');
+      return `<div class="${cls}" data-go="${p.n}">
+        <div class="rail-porta-num">${p.n}</div>
+        <div class="rail-porta-name">${p.name}</div>
+        <div class="rail-porta-icon">${icon}</div>
+      </div>`;
+    }).join('');
+    rail.querySelectorAll('.rail-porta.active, .rail-porta.done').forEach(el => {
+      el.addEventListener('click', () => {
+        const n = +el.dataset.go;
+        if (unlocked.has(n)) goToPorta(n);
+      });
+    });
+
+    // progress
+    const filled = portasFilled.size;
+    const pct = Math.min(100, (filled / (TOTAL_PORTAS-1)) * 100);
+    $('#progress-fill').style.width = pct + '%';
+  }
+
+  function goToPorta(n){
+    if (!unlocked.has(n)) return;
+    $$('.porta').forEach(p => p.classList.toggle('show', +p.dataset.porta === n));
+    currentPorta = n;
+    renderRail();
+    window.scrollTo({top:0, behavior:'smooth'});
+    refreshFinal(); // keep cartão in sync
+  }
+
+  // ============ PORTA 1 — ARRIVAL ============
+  $('#arrival-confirm').addEventListener('click', () => {
+    portasFilled.add(1);
+    unlocked.add(2);
+    goToPorta(2);
+  });
+
+  // ============ PORTA 2 — THERMOMETER ============
+  const tInput = $('#t-input');
+  const tNum = $('#t-num');
+  const tFill = $('#t-fill');
+  const tFb = $('#t-feedback');
+  const tFeedbacks = {
+    0:"tô leve hoje",
+    1:"quase nada — mas já dei número",
+    2:"levinho. Anota mesmo assim.",
+    3:"dá pra carregar — mas dá pra ouvir",
+    4:"começou a pesar de leve",
+    5:"meio-meio. É aqui que a gente costuma normalizar o cansaço.",
+    6:"pesando. Vale ouvir antes de virar 8.",
+    7:"tá pesado. Tá segurando coisa demais sozinha.",
+    8:"oito. Tá no limite que ninguém imagina.",
+    9:"nove. Esse número merece ser dito em voz alta.",
+    10:"dez. Você cansou. Faz sentido você estar aqui agora."
+  };
+  let thermoChanged = false;
+  function syncThermo(){
+    const v = +tInput.value;
+    tNum.textContent = v;
+    tFill.style.width = (v*10) + '%';
+    tFb.textContent = tFeedbacks[v];
+    tFb.classList.add('show');
+    // color
+    const t = v / 10;
+    const r = Math.round(20 + t * (110-20));
+    const g = Math.round(17 + t * (59-17));
+    const b = Math.round(15 + t * (46-15));
+    tNum.style.color = (v === 0) ? 'var(--ink)' : `rgb(${r},${g},${b})`;
+    if (v > 0){ thermoChanged = true; portasFilled.add(2); renderRail(); refreshFinal(); }
+    setNextEnabled(2, thermoChanged);
+  }
+  tInput.addEventListener('input', syncThermo);
+
+  // ============ PORTA 3 — ELO DIAGNOSTIC ============
+  $$('.elo-slider').forEach(s => {
+    s.addEventListener('input', () => {
+      const id = s.dataset.q;
+      $(`[data-val="${id}"]`).textContent = s.value;
+      computeELO();
+      portasFilled.add(3);
+      renderRail();
+      refreshFinal();
+      setNextEnabled(3, true);
+    });
+  });
+
+  function getPillarAvg(prefix){
+    const vals = $$(`.elo-slider[data-q^="${prefix}"]`).map(s => +s.value);
+    return vals.reduce((a,b)=>a+b, 0) / vals.length;
+  }
+
+  function computeELO(){
+    const e = getPillarAvg('e'); // essência (e1, e2, e3)
+    const l = getPillarAvg('l');
+    const o = getPillarAvg('o');
+    const all = {essencia:e, lideranca:l, organizacao:o};
+
+    $$('.elo-pillar').forEach(p => {
+      const k = p.dataset.pillar;
+      p.querySelector('[data-pillar-avg]').innerHTML = all[k].toFixed(1) + '<span class="of">/10</span>';
+    });
+
+    // radar
+    const scale = (v) => v / 10; // 0-1
+    // top vertex (essência) at (0, -100), bottom-right (liderança) at (86.6, 50), bottom-left (organização) at (-86.6, 50)
+    const ePt = [0, -100 * scale(e)];
+    const lPt = [86.6 * scale(l), 50 * scale(l)];
+    const oPt = [-86.6 * scale(o), 50 * scale(o)];
+    $('#radar-poly').setAttribute('points', `${ePt[0]},${ePt[1]} ${lPt[0]},${lPt[1]} ${oPt[0]},${oPt[1]}`);
+    $('#radar-c1').setAttribute('cx', ePt[0]); $('#radar-c1').setAttribute('cy', ePt[1]);
+    $('#radar-c2').setAttribute('cx', lPt[0]); $('#radar-c2').setAttribute('cy', lPt[1]);
+    $('#radar-c3').setAttribute('cx', oPt[0]); $('#radar-c3').setAttribute('cy', oPt[1]);
+    $('#radar-wrap').classList.add('show');
+
+    // lowest pillar
+    const lowest = Object.entries(all).sort((a,b) => a[1]-b[1])[0];
+    const insights = {
+      essencia: 'O pilar mais frágil é <strong>Essência</strong>. Sua energia tá vazando antes mesmo de chegar nas pessoas. A semana começa pelo que <em>te sustenta</em> — não pelo que tu cobra dos outros.',
+      lideranca: 'O pilar mais frágil é <strong>Liderança</strong>. Você tá funcionando — mas tá conduzindo no susto. A semana começa por uma <em>conversa ou padrão</em> que reorganize uma relação.',
+      organizacao: 'O pilar mais frágil é <strong>Organização</strong>. Tu tem clareza interna — só não tem ritmo externo. A semana começa por colocar <em>um único ritual</em> no calendário.'
+    };
+    $('#radar-insight').innerHTML = insights[lowest[0]];
+
+    // store for final
+    state.elo = { essencia:e, lideranca:l, organizacao:o, lowest:lowest[0], lowestVal:lowest[1] };
+  }
+
+  // ============ PORTA 4 — BIG FIVE ============
+  $$('.bf-slider').forEach(s => {
+    s.addEventListener('input', () => {
+      computeBF();
+      portasFilled.add(4);
+      renderRail();
+      refreshFinal();
+      setNextEnabled(4, true);
+    });
+  });
+
+  function dimAvg(prefix){
+    const vals = $$(`.bf-slider[data-q^="${prefix}"]`).map(s => {
+      const v = +s.value;
+      return s.dataset.reverse ? (10-v) : v;
+    });
+    return vals.reduce((a,b)=>a+b, 0) / vals.length;
+  }
+
+  function levelLabel(v){
+    if (v <= 3.5) return 'baixa';
+    if (v >= 6.5) return 'alta';
+    return 'média';
+  }
+
+  const bfImplications = {
+    abertura: {
+      alta: 'aceita mudança fácil — o desafio é manter foco, não testar coisas demais',
+      média: 'equilibrada entre o conhecido e o novo — escolhe quando vale arriscar',
+      baixa: 'precisa enxergar segurança antes de mudar — comece pela menor mudança possível'
+    },
+    conscienciosidade: {
+      alta: 'executa qualquer plano — o desafio é não se cobrar até a exaustão',
+      média: 'executa o que faz sentido pra você — precisa de "porquê" claro',
+      baixa: 'tem ótimas ideias e termina pouco — precisa de ação binária e prazo curto'
+    },
+    extroversao: {
+      alta: 'energia vem de pessoas — o desafio é não usar conversa pra evitar decisão',
+      média: 'flexível com pessoas e silêncio — modula bem',
+      baixa: 'energia vem do silêncio — conversas duras precisam ser preparadas, não improvisadas'
+    },
+    amabilidade: {
+      alta: 'cuida demais — confunde clareza com dureza, padrão com agressão',
+      média: 'firme sem ser fria — bom equilíbrio entre cuidar e exigir',
+      baixa: 'firme com pessoas — o desafio é não atropelar quando tá com pressa'
+    },
+    estabilidade: {
+      alta: 'mantém o eixo sob pressão — o desafio é não desconectar do que sente',
+      média: 'sente, mas se recompõe — leitura emocional saudável',
+      baixa: 'absorve cada erro como prova de fracasso — precisa de plano de retorno antes de plano de execução'
+    }
+  };
+
+  function computeBF(){
+    const a = dimAvg('a');
+    const c = dimAvg('c');
+    const e = dimAvg('e_');
+    const m = dimAvg('m');
+    const n = dimAvg('n');
+    state.bf = {abertura:a, conscienciosidade:c, extroversao:e, amabilidade:m, estabilidade:n};
+
+    // render personality card
+    const traits = [
+      {key:'abertura', name:'Abertura', val:a},
+      {key:'conscienciosidade', name:'Conscienciosidade', val:c},
+      {key:'extroversao', name:'Extroversão', val:e},
+      {key:'amabilidade', name:'Amabilidade', val:m},
+      {key:'estabilidade', name:'Estabilidade emocional', val:n}
+    ];
+    const cardEl = $('#personality');
+    const list = $('#personality-traits');
+    list.innerHTML = traits.map(t => `
+      <div class="trait">
+        <div class="trait-name">${t.name}</div>
+        <div class="trait-level">${levelLabel(t.val)} <span style="opacity:.5; font-size:14px">(${t.val.toFixed(1)})</span></div>
+        <div class="trait-implication">${bfImplications[t.key][levelLabel(t.val)]}</div>
+      </div>
+    `).join('');
+
+    // a synthetic title
+    const dominant = traits.slice().sort((a,b) => Math.abs(b.val-5) - Math.abs(a.val-5))[0];
+    const titles = {
+      abertura: dominant.val > 5 ? 'A que sempre tá pensando no novo' : 'A que valoriza o que já funciona',
+      conscienciosidade: dominant.val > 5 ? 'A que se cobra primeiro' : 'A que tem mil ideias e dispersa',
+      extroversao: dominant.val > 5 ? 'A que se energiza nos outros' : 'A que se renova no silêncio',
+      amabilidade: dominant.val > 5 ? 'A que cuida e absorve' : 'A que decide sem rodeio',
+      estabilidade: dominant.val > 5 ? 'A que mantém eixo sob pressão' : 'A que rumina cada erro como prova'
+    };
+    $('#personality-title').textContent = titles[dominant.key];
+    cardEl.classList.add('show');
+
+    // update Porta 9 intro
+    const introText = `seu perfil mostra ${levelLabel(c)} conscienciosidade, ${levelLabel(e)} extroversão e ${levelLabel(n)} estabilidade emocional. Isso muda o tipo de ação que cabe em você.`;
+    $('#action-intro-text').textContent = introText;
+
+    // tips for action card
+    const tips = [];
+    if (c <= 3.5) tips.push('A ação tem que caber em <strong>10 minutos</strong> e ter prazo binário (fez/não fez)');
+    if (c >= 6.5) tips.push('A ação <strong>não pode</strong> exigir perfeição — defina a versão "feio mas pronto"');
+    if (e <= 3.5) tips.push('Se envolve conversa, escreva <strong>script antes</strong> — não improvise');
+    if (e >= 6.5) tips.push('Cuidado pra não usar a conversa como anestésico — defina a <strong>decisão</strong> que sai dela');
+    if (m >= 6.5) tips.push('Lembre: <strong>clareza não é dureza</strong> — pessoas merecem saber o que esperar de você');
+    if (n <= 3.5) tips.push('Antes da ação, escreva uma <strong>frase de retorno</strong> pra usar quando recair');
+    if (a <= 3.5) tips.push('Comece pela <strong>menor mudança possível</strong> — não tente pular etapas');
+
+    if (tips.length){
+      $('#action-tips-text').innerHTML = tips.slice(0,3).map(t => '• '+t).join('<br/>');
+      $('#action-tips').classList.add('show');
+    }
+  }
+
+  // ============ PORTA 5 — ACTIVITY ============
+  ['#activity-text', '#activity-when', '#activity-cost', '#activity-freq'].forEach(sel => {
+    $(sel).addEventListener('input', () => {
+      const filled = !!$('#activity-text').value.trim();
+      if (filled){ portasFilled.add(5); renderRail(); refreshFinal(); }
+      setNextEnabled(5, filled);
+    });
+  });
+
+  // ============ PORTA 6 — 80/20 ============
+  ['#split-mine','#split-rest'].forEach(sel => {
+    $(sel).addEventListener('input', () => {
+      const filled = !!$('#split-mine').value.trim() && !!$('#split-rest').value.trim();
+      if (filled){ portasFilled.add(6); renderRail(); refreshFinal(); }
+      setNextEnabled(6, filled);
+    });
+  });
+
+  // ============ PORTA 7 — FEAR ============
+  $('#fear').addEventListener('input', () => {
+    const filled = !!$('#fear').value.trim();
+    if (filled){ portasFilled.add(7); renderRail(); refreshFinal(); }
+    setNextEnabled(7, filled);
+  });
+
+  // ============ PORTA 8 — DESTINATION ============
+  let team = 'com';
+  let chosenDest = null;
+
+  $$('.team-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      $$('.team-opt').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+      team = b.dataset.team;
+      $$('[data-team-block]').forEach(blk => {
+        blk.style.display = blk.dataset.teamBlock === team ? 'block' : 'none';
+      });
+      // reset zones
+      $$('.dest-zone').forEach(z => z.classList.remove('on'));
+      $('#dest-detail-1').classList.remove('show');
+      $('#dest-detail-2').classList.remove('show');
+      chosenDest = null;
+    });
+  });
+
+  const destPrompts = {
+    passar: [
+      { q: 'Quem pode assumir uma parte (uma só)?', ph: 'ex.: Carla, minha assistente; Bia, da operação' },
+      { q: 'Que parte pequena começa esta semana?', ph: 'ex.: triagem dos pedidos abaixo de R$ 500' }
+    ],
+    processo: [
+      { q: 'Qual padrão mínimo precisa existir?', ph: 'ex.: checklist de 4 itens; ordem fixa de 3 passos' },
+      { q: 'Onde esse padrão vai morar?', ph: 'ex.: planilha do drive; agenda recorrente; mural' }
+    ],
+    'critério': [
+      { q: 'Que critério deixa claro o que entra ou não pra você?', ph: 'ex.: só venho se for valor acima de X; só decido se for cliente recorrente' },
+      { q: 'Como vou comunicar esse critério?', ph: 'ex.: mensagem fixada no grupo; combinado por escrito' }
+    ],
+    automatizar: [
+      { q: 'Que ferramenta ou modelo vai assumir esse pedaço?', ph: 'ex.: agendamento automático no Calendly; resposta padrão no WhatsApp Business' },
+      { q: 'Quando essa automação tá pronta esta semana?', ph: 'ex.: até quarta-feira' }
+    ],
+    fracionar: [
+      { q: 'Que pedaço do 80% você simplesmente não vai mais fazer?', ph: 'ex.: parar de responder mensagem fora do horário comercial' },
+      { q: 'Quem ou o quê absorve esse pedaço?', ph: 'ex.: ninguém, pessoas vão esperar; ou: vou redirecionar para FAQ' }
+    ],
+    eliminar: [
+      { q: 'Como você comunica que essa atividade acabou?', ph: 'ex.: aviso no grupo; mensagem fixada; e-mail aos clientes' },
+      { q: 'O que tu vai fazer com o tempo que sobrar?', ph: 'ex.: bloco de gestão; descanso; estratégia' }
+    ]
+  };
+
+  function bindDestZones(){
+    $$('.dest-zone').forEach(z => {
+      z.addEventListener('click', () => {
+        $$('.dest-zone').forEach(x => x.classList.remove('on'));
+        z.classList.add('on');
+        chosenDest = z.dataset.dest;
+        const prompts = destPrompts[chosenDest];
+        if (prompts){
+          $('#dest-q-1').textContent = prompts[0].q;
+          $('#dest-i-1').setAttribute('placeholder', prompts[0].ph);
+          $('#dest-q-2').textContent = prompts[1].q;
+          $('#dest-i-2').setAttribute('placeholder', prompts[1].ph);
+          $('#dest-detail-1').classList.add('show');
+          $('#dest-detail-2').classList.add('show');
+        }
+        portasFilled.add(8);
+        renderRail();
+        refreshFinal();
+        setNextEnabled(8, true);
+      });
+    });
+  }
+  bindDestZones();
+
+  ['#dest-i-1','#dest-i-2'].forEach(sel => {
+    $(sel).addEventListener('input', () => { refreshFinal() });
+  });
+
+  // ============ PORTA 9 — ACTION ============
+  $('#action-text').addEventListener('input', () => {
+    const filled = !!$('#action-text').value.trim();
+    if (filled){ portasFilled.add(9); renderRail(); refreshFinal(); }
+    setNextEnabled(9, filled);
+    renderWeekProofs();
+  });
+
+  // ============ PORTA 10 — DAILY PROOFS ============
+  function renderWeekProofs(){
+    const action = $('#action-text').value.trim();
+    const dest = chosenDest;
+    const days = [
+      { name:'Seg', icon:'<svg viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>',
+        proof: dest === 'passar'
+          ? 'Print da mensagem combinando o novo fluxo com a pessoa'
+          : (dest === 'automatizar' ? 'Print da ferramenta configurada' : 'Print do padrão definido') },
+      { name:'Ter', icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+        proof: dest === 'passar' ? 'Foto/print da primeira execução pela pessoa' : 'Print da primeira aplicação real' },
+      { name:'Qua', icon:'<svg viewBox="0 0 24 24"><path d="M12 22s-7-4-7-12a7 7 0 0 1 14 0c0 8-7 12-7 12z"/></svg>',
+        proof: '1 frase: hoje quase peguei de volta quando…' },
+      { name:'Qui', icon:'<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+        proof: 'Print de uma vez em que não respondi/peguei de volta antes do horário combinado' },
+      { name:'Sex', icon:'<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
+        proof: 'Número: quantas vezes quis pegar de volta esta semana?' },
+      { name:'Sáb', icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12"/></svg>',
+        proof: '1 hora sem celular registrada (print do tempo de tela)' },
+      { name:'Dom', icon:'<svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>',
+        proof: '3 linhas: o que mudou em mim esta semana foi…' }
+    ];
+    $('#week-grid').innerHTML = days.map(d => `
+      <div class="day">
+        <div class="day-name">${d.name}</div>
+        <div class="day-icon">${d.icon}</div>
+        <p class="day-proof">${d.proof}</p>
+      </div>
+    `).join('');
+    state.days = days;
+  }
+  renderWeekProofs();
+
+  $('#sign-name').addEventListener('input', () => {
+    const filled = !!$('#sign-name').value.trim();
+    if (filled){ portasFilled.add(10); renderRail(); refreshFinal(); }
+    setNextEnabled(10, filled);
+  });
+
+  // ============ STATE & CARTÃO ============
+  const state = { elo:null, bf:null, days:[] };
+
+  function refreshFinal(){
+    // arrival -> termômetro
+    const t = +tInput.value;
+    $('#card-arrival').textContent = t > 0 ? `cheguei com ${t}/10 de peso` : '…';
+
+    // pilar
+    if (state.elo){
+      const labels = {essencia:'Essência', lideranca:'Liderança', organizacao:'Organização'};
+      $('#card-pillar').innerHTML = `<em>${labels[state.elo.lowest]}</em> · ${state.elo.lowestVal.toFixed(1)}/10`;
+    }
+
+    // activity
+    const a = $('#activity-text').value.trim();
+    $('#card-activity').textContent = a || '…';
+
+    // 80/20
+    $('#card-mine').textContent  = $('#split-mine').value.trim() || '…';
+    $('#card-rest').textContent  = $('#split-rest').value.trim() || '…';
+
+    // fear
+    $('#card-fear').textContent  = $('#fear').value.trim() || '…';
+
+    // action
+    $('#card-action').textContent = $('#action-text').value.trim() || '…';
+
+    // proofs
+    if (state.days.length){
+      $('#card-proofs').innerHTML = state.days.map(d => `<div style="margin-bottom:6px"><b style="color:var(--bronze-deep)">${d.name}:</b> ${d.proof}</div>`).join('');
+    }
+
+    // sign
+    const name = $('#sign-name').value.trim();
+    const date = $('#sign-date').value;
+    if (name){
+      const dateStr = date ? new Date(date+'T00:00:00').toLocaleDateString('pt-BR') : '';
+      $('#card-sign').innerHTML = `<em>${name}</em> · ${dateStr}`;
+    }
+
+    // ============ MEL READING ============
+    if (t > 0) $('#mr-thermo').innerHTML = `Chegou em <strong>${t}/10</strong>. ${t >= 8 ? 'Está no limite — sustente o ritmo do encontro com leveza, evite empilhar.' : t >= 5 ? 'Cansaço normalizado — provoque que ela ouse colocar número maior.' : 'Subestima o cansaço — investigue o "tô bem" automático.'}`;
+
+    if (state.elo){
+      const labels = {essencia:'Essência', lideranca:'Liderança', organizacao:'Organização'};
+      const symptoms = {
+        essencia: 'reage no impulso, decide cansada, perde o eixo após uma frustração',
+        lideranca: 'centraliza decisões, microgerencia, equipe espera autorização para tudo',
+        organizacao: 'vive no improviso, gestão sempre depois, urgências se sobrepõem ao estratégico'
+      };
+      $('#mr-pillar').innerHTML = `<strong>${labels[state.elo.lowest]}</strong> em ${state.elo.lowestVal.toFixed(1)}/10`;
+      $('#mr-symptom').textContent = symptoms[state.elo.lowest];
+    }
+
+    if (state.bf){
+      const b = state.bf;
+      const profile = `Conscienciosidade ${levelLabel(b.conscienciosidade)} (${b.conscienciosidade.toFixed(1)}); Extroversão ${levelLabel(b.extroversao)} (${b.extroversao.toFixed(1)}); Amabilidade ${levelLabel(b.amabilidade)} (${b.amabilidade.toFixed(1)}); Estabilidade ${levelLabel(b.estabilidade)} (${b.estabilidade.toFixed(1)}); Abertura ${levelLabel(b.abertura)} (${b.abertura.toFixed(1)}).`;
+      $('#mr-personality').textContent = profile;
+
+      const risks = [];
+      if (b.conscienciosidade >= 6.5) risks.push('Risco de exaustão: vai executar o plano todo e se cobrar até ficar sem energia. Reduza a meta antes que ela peça.');
+      if (b.conscienciosidade <= 3.5) risks.push('Risco de abandono: ótimas ideias sem execução. Insista em prova binária diária e contato curto durante a semana.');
+      if (b.estabilidade <= 3.5) risks.push('Risco de auto-julgamento: cada deslize vira identidade. Reforce que recaída é dado, não fracasso, especialmente após o 3º dia.');
+      if (b.amabilidade >= 6.5) risks.push('Risco de não impor padrão: vai amenizar com a equipe e voltar a centralizar. Treine clareza-como-cuidado.');
+      if (b.extroversao <= 3.5) risks.push('Risco de adiar conversas duras: tarefas que exigem confronto ficam para "depois". Faça script antes de mandar pra semana.');
+      if (b.abertura <= 3.5) risks.push('Risco de resistir à mudança proposta: comece pela menor versão possível, valide segurança antes de expandir.');
+      $('#mr-risks').innerHTML = risks.length
+        ? risks.slice(0,3).map(r => '• '+r).join('<br/>')
+        : 'Perfil equilibrado — observe o cumprimento das provas diárias para calibrar nas próximas semanas.';
+
+      // hook
+      let hook = 'Próximo encontro: <strong>a Força que virou Prisão</strong>. ';
+      if (b.conscienciosidade >= 6.5) hook += 'Aprofunde como a competência dela virou cárcere — quem pode mais, sustenta mais, e some.';
+      else if (b.amabilidade >= 6.5) hook += 'Aprofunde como o cuidado virou centralização — quem cuida demais, segura demais.';
+      else if (b.estabilidade <= 3.5) hook += 'Aprofunde como a auto-cobrança virou prisão — o erro pequeno virou identidade.';
+      else hook += 'Aprofunde a força específica dela (a que mais apareceu na conversa) e mostre como essa força tá sustentando o problema.';
+      $('#mr-hook').innerHTML = hook;
+    }
+  }
+
+  // ============ NAVIGATION CONTROLS ============
+  function setNextEnabled(porta, ok){
+    const portaEl = $(`.porta[data-porta="${porta}"]`);
+    if (!portaEl) return;
+    const next = portaEl.querySelector('[data-next]');
+    if (next) next.disabled = !ok;
+  }
+
+  $$('[data-back]').forEach(b => {
+    b.addEventListener('click', () => {
+      if (currentPorta > 1) goToPorta(currentPorta - 1);
+    });
+  });
+
+  $$('[data-next]').forEach(b => {
+    b.addEventListener('click', () => {
+      // unlock next porta when Mel hasn't (in non-mel mode, this only works when not disabled — but to make MVP usable solo, allow advancing)
+      const next = currentPorta + 1;
+      unlocked.add(next);
+      goToPorta(next);
+    });
+  });
+
+  // Mel unlock buttons
+  $$('[data-unlock]').forEach(b => {
+    b.addEventListener('click', () => {
+      const next = currentPorta + 1;
+      unlocked.add(next);
+      // also enable the next button visually
+      const portaEl = $(`.porta[data-porta="${currentPorta}"]`);
+      const nextBtn = portaEl.querySelector('[data-next]');
+      if (nextBtn) nextBtn.disabled = false;
+      // move automatically
+      goToPorta(next);
+    });
+  });
+
+  // ============ INIT ============
+  // today
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth()+1).padStart(2,'0');
+  const dd = String(today.getDate()).padStart(2,'0');
+  $('#sign-date').value = `${yyyy}-${mm}-${dd}`;
+
+  renderRail();
+  syncThermo();
+
+  // print
+  $('#btn-print').addEventListener('click', () => window.print());
+})();
+</script>
+
+</body>
+</html>
